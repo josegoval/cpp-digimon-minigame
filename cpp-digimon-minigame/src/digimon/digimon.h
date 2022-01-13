@@ -4,6 +4,10 @@
 class digimon
 {
     std::string name_;
+public:
+    std::string name() const;
+    void set_name(const std::string& name);
+private:
     int health_;
     float damage_reduction_;
     int attack_power_;

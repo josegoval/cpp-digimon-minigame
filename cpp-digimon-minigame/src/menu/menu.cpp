@@ -5,7 +5,7 @@ short menu::get_selected_option() const
     short option;
     std::cout << "Insert your option:" << std::endl;
     std::cin >> option;
-    while (option < 1 || option > options_.size())
+    while (option < 0 || option >= options_.size())
     {
         std::cout << "Please insert a valid option:" << std::endl;
         std::cin >> option;

@@ -1,8 +1,9 @@
 #include <iostream>
 
+#include "game/game.h"
+
 int main()
 {
-    /* code */
-    std::cout << "Running";
+    game().begin_game();
     return 0;
 }

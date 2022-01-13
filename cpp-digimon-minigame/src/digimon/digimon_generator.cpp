@@ -9,7 +9,7 @@ std::vector<std::string> random_digimon_names = {
 
 digimon generate_random_digimon()
 {
-    const std::string name = random_digimon_names.at(get_random_int(0,random_digimon_names.size()));
+    const std::string name = random_digimon_names.at(get_random_int(0,random_digimon_names.size() - 1));
     const int health = get_random_int(300,700);
     const float damage_reduction = static_cast<float>(get_random_int(5, 70)) / 100;
     const int attack_power = get_random_int(130,327);
@@ -17,7 +17,29 @@ digimon generate_random_digimon()
     return digimon(name, health, damage_reduction,attack_power, critical_strike_chance);
 }
 
-std::vector<digimon> generate_random_digimons(const int& amount)
+std::vector<digimon> generate_random_digimons(int amount)
 {
- // TODO   
+    std::vector<digimon> digimons;
+    digimons.reserve(amount);
+    // ReSharper disable once CppJoinDeclarationAndAssignment
+    bool is_repeated;
+    while (amount > 0)
+    {
+        is_repeated = false;
+        digimon next_digimon = generate_random_digimon();
+        for (const auto& digimon : digimons)
+        {
+            if (digimon.name() == next_digimon.name())
+            {
+                is_repeated = true;
+                break;
+            }
+        }
+        if (!is_repeated)
+        {
+            digimons.emplace_back(next_digimon);
+            --amount;
+        }
+    }
+    return digimons;
 }

@@ -3,4 +3,4 @@
 
 class digimon;
 digimon generate_random_digimon();
-std::vector<digimon> generate_random_digimons(const int& amount);
+std::vector<digimon> generate_random_digimons(int amount);

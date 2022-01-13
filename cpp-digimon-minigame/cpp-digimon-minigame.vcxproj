@@ -142,6 +142,7 @@
     <ClCompile Include="src\digimon\digimon.cpp" />
     <ClCompile Include="src\digimon\digimon_generator.cpp" />
     <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\game\player\player.cpp" />
     <ClCompile Include="src\main.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -364,6 +365,7 @@
     <ClInclude Include="src\digimon\digimon.h" />
     <ClInclude Include="src\digimon\digimon_generator.h" />
     <ClInclude Include="src\game\game.h" />
+    <ClInclude Include="src\game\player\player.h" />
     <ClInclude Include="src\menu\menu.h" />
     <ClInclude Include="src\utils\print\print.h" />
     <ClInclude Include="src\utils\random\random.h" />

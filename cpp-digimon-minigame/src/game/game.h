@@ -1,17 +1,13 @@
 ﻿#pragma once
-#include <string>
-#include <vector>
 
-#include "../digimon/digimon.h"
+#include "player/player.h"
 
 class game
 {
-    std::string player_name_;
-    
+    player player_;
 public:
-    std::string player_name() const;
-    void set_player_name(const std::string& player_name);
-    void set_player_name(const std::istream& cin);
+    game();
+
     void choose_initial_digimon();
     void begin_game();
 };

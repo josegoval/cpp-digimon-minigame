@@ -2,6 +2,16 @@
 
 #include "../utils/random/random.h"
 
+std::string digimon::name() const
+{
+    return name_;
+}
+
+void digimon::set_name(const std::string& name)
+{
+    name_ = name;
+}
+
 bool digimon::is_critical_strike() const
 {
     return get_random_float_from_0_1() <= critical_strike_chance_;
