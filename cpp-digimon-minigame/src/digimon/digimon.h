@@ -12,7 +12,6 @@ class digimon
     bool is_critical_strike() const;
 public:
     digimon(const std::string& name, const int& health, const float& damage_reduction, const int& attack_power, const float& critical_strike_chance);
-    digimon(const digimon& digimon);
 
     std::string name() const;
     void set_name(const std::string& name);
