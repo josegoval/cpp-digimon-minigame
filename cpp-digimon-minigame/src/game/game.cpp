@@ -5,6 +5,7 @@
 #include "../digimon/digimon_generator.h"
 #include "../menu/Menu.h"
 #include "../utils/print/print.h"
+#include "../utils/random/random.h"
 
 std::string transform_digimon_to_string(digimon digimon)
 {
@@ -24,17 +25,68 @@ std::vector<std::string> format_digimons_to_strings(const std::vector<digimon>& 
 
 game::game()
 {
+    battles_ = 0;
     player_ = player{};
+}
+
+void game::report_battle_results(const digimon& winner, const digimon& loser)
+{
+    println(loser.name() + " can't continue...");
+    println(winner.name() + " has won the battle!");
+}
+
+void game::resolve_battle(digimon& enemy)
+{
+    bool is_player_attacking_first;
+    digimon& first_digimon = enemy;
+    digimon& second_digimon = enemy;
+
+    do
+    {
+        is_player_attacking_first = get_random_int(0,2) < 2;
+        first_digimon = is_player_attacking_first ? *player_.digimon : enemy;
+        second_digimon = is_player_attacking_first ? enemy : *player_.digimon; 
+        second_digimon.take_damage(first_digimon.attack());
+        if (!second_digimon.is_alive())
+        {
+            report_battle_results(first_digimon, second_digimon);
+            return;
+        };
+        first_digimon.take_damage(second_digimon.attack());
+    }
+    while (first_digimon.is_alive());
+    report_battle_results(second_digimon, first_digimon);
+}
+
+void game::next_battle()
+{
+    ++battles_;
+    digimon enemy = generate_random_digimon();
+    println("Battle number " + std::to_string(battles_) + "!");
+    println("You play against "+ enemy.name());
+    resolve_battle(enemy);
 }
 
 void game::choose_initial_digimon()
 {
-    const std::vector<digimon> digimons = generate_random_digimons(3);
+    std::vector<digimon> digimons = generate_random_digimons(3);
     const menu choose_digimon_menu("Which digimon would you like to pick?", format_digimons_to_strings(digimons));
     const short option = choose_digimon_menu.display_and_select_option();
-    player_.digimon = const_cast<digimon*>(&digimons.at(option));
+    digimon digimon = digimons.at(option);
+    player_.digimon = &digimon;
+    player_.digimon->set_name("ayayaya");
     println("You have selected " + player_.digimon->name() + "! Congratulations!");
-    println("Let's the battle begin!");
+}
+
+void game::start_the_battles()
+{
+    println("Let's the battles begin!");
+    do
+    {
+        next_battle();
+    }
+    while (player_.digimon->is_alive());
+    println("You have survived "+ std::to_string(battles_)+ " battles!");
 }
 
 void game::begin_game()
@@ -44,4 +96,5 @@ void game::begin_game()
     std::cin >> this->player_.name;
     println("Welcome " + this->player_.name + "!");
     choose_initial_digimon();
+    start_the_battles();
 }
