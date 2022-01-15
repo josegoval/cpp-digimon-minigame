@@ -12,13 +12,13 @@ std::string transform_digimon_to_string(digimon digimon)
     return digimon.name();
 }
 
-std::vector<std::string> format_digimons_to_strings(const std::vector<digimon>& digimons)
+std::vector<std::string> format_digimons_to_strings(const std::vector<digimon*>& digimons)
 {
     std::vector<std::string> digimon_names;
     digimon_names.reserve(digimons.size());
     for (const auto& digimon : digimons)
     {
-        digimon_names.emplace_back(digimon.name());
+        digimon_names.emplace_back(digimon->name());
     }
     return digimon_names;
 }
@@ -35,46 +35,44 @@ void game::report_battle_results(const digimon& winner, const digimon& loser)
     println(winner.name() + " has won the battle!");
 }
 
-void game::resolve_battle(digimon& enemy)
+void game::resolve_battle(digimon* enemy)
 {
     bool is_player_attacking_first;
-    digimon& first_digimon = enemy;
-    digimon& second_digimon = enemy;
+    digimon* first_digimon = enemy;
+    digimon* second_digimon = enemy;
 
     do
     {
         is_player_attacking_first = get_random_int(0,2) < 2;
-        first_digimon = is_player_attacking_first ? *player_.digimon : enemy;
-        second_digimon = is_player_attacking_first ? enemy : *player_.digimon; 
-        second_digimon.take_damage(first_digimon.attack());
-        if (!second_digimon.is_alive())
+        first_digimon = is_player_attacking_first ? player_.digimon : enemy;
+        second_digimon = is_player_attacking_first ? enemy : player_.digimon; 
+        second_digimon->take_damage(first_digimon->attack());
+        if (!second_digimon->is_alive())
         {
-            report_battle_results(first_digimon, second_digimon);
+            report_battle_results(*first_digimon, *second_digimon);
             return;
         };
-        first_digimon.take_damage(second_digimon.attack());
+        first_digimon->take_damage(second_digimon->attack());
     }
-    while (first_digimon.is_alive());
-    report_battle_results(second_digimon, first_digimon);
+    while (first_digimon->is_alive());
+    report_battle_results(*second_digimon, *first_digimon);
 }
 
 void game::next_battle()
 {
     ++battles_;
-    digimon enemy = generate_random_digimon();
+    digimon* enemy = generate_random_digimon();
     println("Battle number " + std::to_string(battles_) + "!");
-    println("You play against "+ enemy.name());
+    println("You play against "+ enemy->name());
     resolve_battle(enemy);
 }
 
 void game::choose_initial_digimon()
 {
-    std::vector<digimon> digimons = generate_random_digimons(3);
+    std::vector<digimon*> digimons = generate_random_digimons(3);
     const menu choose_digimon_menu("Which digimon would you like to pick?", format_digimons_to_strings(digimons));
     const short option = choose_digimon_menu.display_and_select_option();
-    digimon digimon = digimons.at(option);
-    player_.digimon = &digimon;
-    player_.digimon->set_name("ayayaya");
+    player_.digimon = digimons.at(option);
     println("You have selected " + player_.digimon->name() + "! Congratulations!");
 }
 
