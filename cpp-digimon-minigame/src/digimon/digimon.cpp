@@ -25,15 +25,25 @@ digimon::digimon(const std::string& name, const int& health, const float& damage
     
 }
 
+digimon::digimon(const digimon& digimon)
+{
+    name_ = digimon.name_;
+    health_ = digimon.health_;
+    damage_reduction_ = digimon.damage_reduction_;
+    attack_power_ = digimon.attack_power_;
+    critical_strike_chance_ = digimon.critical_strike_chance_;
+}
+
 float digimon::attack() const
 {
     return is_critical_strike() ? attack_power_ * 2 : attack_power_;
 }
 
-void digimon::take_damage(float damage)
+void digimon::take_damage(const float damage)
 {
     health_ -= damage * (1 - damage_reduction_);
 }
+
 
 bool digimon::is_alive() const
 {
