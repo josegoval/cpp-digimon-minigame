@@ -38,8 +38,8 @@ void game::report_battle_results(const digimon& winner, const digimon& loser)
 void game::resolve_battle(digimon* enemy)
 {
     bool is_player_attacking_first;
-    digimon* first_digimon = enemy;
-    digimon* second_digimon = enemy;
+    digimon* first_digimon;
+    digimon* second_digimon;
 
     do
     {
